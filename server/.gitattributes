@@ -1,0 +1,31 @@
+# 1. Enforce LF endings by default for all text files. 
+# This ensures files mounted into Docker remain Linux-friendly.
+* text=auto eol=lf
+
+# 2. Docker & Configuration files MUST be LF
+Dockerfile text eol=lf
+docker-compose.yml text eol=lf
+*.yml text eol=lf
+*.yaml text eol=lf
+*.json text eol=lf
+*.env text eol=lf
+
+# 3. Scripts and execution files MUST be LF (Docker will crash without this)
+*.sh text eol=lf
+*.py text eol=lf
+*.js text eol=lf
+*.ts text eol=lf
+
+# 4. Exception: Keep Windows-native files as CRLF 
+# (Only use this if you run these scripts directly on your Windows host, not inside Docker)
+*.bat text eol=crlf
+*.cmd text eol=crlf
+*.ps1 text eol=crlf
+
+# 5. Leave binary files completely alone
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.pdf binary
