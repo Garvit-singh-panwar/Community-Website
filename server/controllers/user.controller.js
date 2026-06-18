@@ -5,6 +5,9 @@ import Quiz from "../models/quiz.model.js";
 import Resource from "../models/resource.model.js";
 import Contest from "../models/contest.model.js";
 import User from "../models/user.model.js";
+import Problem from "../models/problem.model.js";
+import { deleteMultipleFromCloudinary } from "../config/cloudnary.js";
+import Question from "../models/question.model.js";
 
 export const createProfile = async (req, res) => {
     try {
@@ -400,13 +403,36 @@ export const deleteUser = async(req,res)=>{
         await QuizAttempt.deleteMany({
             user:user._id
         });
+        if (user.role === "admin") {
 
-        if(user.role === "admin"){
-            const contest = await Contest.deleteMany({createdBy:user._id});
-            const resource = await Resource.deleteMany({
-                uploadedBy:user._id
-            });
-            const quiz = await Quiz.deleteMany({createdBy:user._id});
+            const contests = await Contest.find({ createdBy: user._id });
+            const problemIds = contests.flatMap(c => c.problems || []);
+
+            if (problemIds.length > 0) {
+                await Problem.deleteMany({ _id: { $in: problemIds } });
+            }
+            await Contest.deleteMany({ createdBy: user._id });
+
+
+            const resources = await Resource.find({ uploadedBy: user._id });
+            
+            const publicIds = resources
+                .map(res => res.file?.publicId)
+                .filter(Boolean); 
+
+            if (publicIds.length > 0) {
+                await deleteMultipleFromCloudinary(publicIds);
+            }
+            await Resource.deleteMany({ uploadedBy: user._id });
+
+
+            const quizzes = await Quiz.find({ createdBy: user._id });
+            const questionIds = quizzes.flatMap(q => q.questions || []);
+
+            if (questionIds.length > 0) {
+                await Question.deleteMany({ _id: { $in: questionIds } });
+            }
+            await Quiz.deleteMany({ createdBy: user._id });
         }
 
         await User.findByIdAndDelete(user._id);

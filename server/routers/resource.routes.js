@@ -16,3 +16,5 @@ resourceRouter.get("/search", auth, searchResource );
 resourceRouter.get("/:id" ,auth,getResourceById );
 resourceRouter.post("/" , auth , studentCheck , upload.single('file') , uploadResource);
 resourceRouter.delete("/:id" , auth , studentCheck , deleteResource);
+
+export default resourceRouter;

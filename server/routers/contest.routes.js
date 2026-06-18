@@ -13,3 +13,6 @@ contestRouter.post("/:id" , auth, adminCheck , UploadProblem);
 contestRouter.put("/:id" , auth , adminCheck , deleteProblem);
 contestRouter.delete("/:id" , auth , adminCheck , deleteContest);
 contestRouter.post("/submit" , auth, studentCheck , createSubmission);
+
+
+export default contestRouter;
