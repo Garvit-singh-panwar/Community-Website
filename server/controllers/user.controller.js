@@ -8,6 +8,7 @@ import User from "../models/user.model.js";
 import Problem from "../models/problem.model.js";
 import { deleteMultipleFromCloudinary } from "../config/cloudnary.js";
 import Question from "../models/question.model.js";
+import QuizAttempt from "../models/quizAttempted.model.js";
 
 export const createProfile = async (req, res) => {
     try {
@@ -177,13 +178,16 @@ export const getMyQuizes = async(req,res)=>{
         
         const userId = req.user._id;
         
+        const pageNo = req.query.pageNo ?? 0;
+        const limit = 10;
+
         const myQuizes = await Quiz.find({createdBy: userId})
         .sort({createdAt:-1})
         .limit(limit)
         .skip(pageNo*limit);
 
 
-        const total = await Contest.countDocuments({createdBy:userId});
+        const total = await Quiz.countDocuments({createdBy:userId});
 
         const totalPages = Math.ceil(total/limit);
 
@@ -216,13 +220,16 @@ export const getMyResources = async (req , res)=>{
         
         const userId = req.user._id;
 
+        const pageNo = req.query.pageNo ?? 0;
+        const limit = 10;
+
         const myResources = await Resource.find({uploadedBy: userId})
         .sort({createdAt:-1})
         .limit(limit)
         .skip(pageNo*limit);
 
 
-        const total = await Contest.countDocuments({uploadedBy:userId});
+        const total = await Resource.countDocuments({uploadedBy:userId});
 
         const totalPages = Math.ceil(total/limit);
 
@@ -253,7 +260,7 @@ export const getMyContest = async (req,res)=>{
         
         const userId = req.user._id;
 
-        const pageNo = req.params.pageNo || 1;
+        const pageNo = req.query.pageNo || 0;
 
         const limit = 30;
 
@@ -352,7 +359,7 @@ export const updateProfile = async (req, res) => {
         }
 
 
-        if(!Object.keys(dataToUpdate).length === 0){
+        if(Object.keys(dataToUpdate).length === 0){
             return res.status(400).json(
                 {
                     success:false,
@@ -363,7 +370,7 @@ export const updateProfile = async (req, res) => {
 
        
 
-        const profile = await Profile.findByIdAndUpdate(user,
+        const profile = await Profile.findByIdAndUpdate(id,
             dataToUpdate,{new:true}
         );
 
@@ -392,7 +399,9 @@ export const deleteUser = async(req,res)=>{
         
         const user = req.user;
 
-        const profile = await Profile.deleteOne({user:user._id});
+        const profile = await Profile.findOne({
+            user:user._id
+        });
 
         if(profile?.profilePic?.publicId){
             await cloudinary.uploader.destroy(

@@ -33,8 +33,8 @@ app.use(
 app.use("/api/v1/auth" , authRouter);
 app.use("/api/v1/quiz" , quizRouter);
 app.use("/api/v1/resource" , resourceRouter);
-app.use("api/v1/contest" , contestRouter);
-app.use("api/v1/user" , userRouter);
+app.use("/api/v1/contest" , contestRouter);
+app.use("/api/v1/user" , userRouter);
 
 // function to start application
 const startApp = async()=>{
