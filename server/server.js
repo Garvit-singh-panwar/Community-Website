@@ -8,6 +8,9 @@ import { sanitize } from "./middlewares/sanitize.js";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import quizRouter from "./routers/quiz.routes.js";
+import resourceRouter from "./routers/resource.routes.js";
+import contestRouter from "./routers/contest.routes.js";
+import userRouter from "./routers/user.router.js";
 
 
 
@@ -29,8 +32,9 @@ app.use(
 // routes
 app.use("/api/v1/auth" , authRouter);
 app.use("/api/v1/quiz" , quizRouter);
-
-
+app.use("/api/v1/resource" , resourceRouter);
+app.use("api/v1/contest" , contestRouter);
+app.use("api/v1/user" , userRouter);
 
 // function to start application
 const startApp = async()=>{
