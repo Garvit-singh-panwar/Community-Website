@@ -9,8 +9,8 @@ import { createContest, createSubmission, deleteContest, deleteProblem, UploadPr
 const contestRouter = express.Router();
 
 contestRouter.post("/", auth , adminCheck , createContest);
-contestRouter.post("/:id" , auth, adminCheck , UploadProblem);
-contestRouter.put("/:id" , auth , adminCheck , deleteProblem);
+contestRouter.post("/problem/:id" , auth, adminCheck , UploadProblem);
+contestRouter.delete("/problem/:id" , auth , adminCheck , deleteProblem);
 contestRouter.delete("/:id" , auth , adminCheck , deleteContest);
 contestRouter.post("/submit" , auth, studentCheck , createSubmission);
 

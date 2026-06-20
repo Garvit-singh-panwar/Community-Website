@@ -6,7 +6,7 @@ import multer from "multer";
 
 import { auth , adminCheck , studentCheck } from "../middlewares/auth.middleware.js";
 
-import { profileStorage } from "../config/cloudnary";
+import { profileStorage } from "../config/cloudnary.js";
 const uploadProfilePic = multer({ storage: profileStorage });
 
 const userRouter = express.Router();

@@ -1,5 +1,6 @@
 import express from "express";
 import { storage } from "../config/cloudnary.js";
+import multer from "multer";
 
 // middlewares
 import { auth, studentCheck } from "../middlewares/auth.middleware.js";

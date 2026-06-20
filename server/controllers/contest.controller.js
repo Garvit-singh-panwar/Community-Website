@@ -381,8 +381,6 @@ export const deleteContest  = async(req,res)=>{
 }
 
 
-// Helper function to wrap Docker exec inside a Promise with timeout
-import { exec } from 'child_process';
 
 const executeDockerCommand = (cmd, inputData = null, timeoutMs = 5000) => {
     return new Promise((resolve) => {
